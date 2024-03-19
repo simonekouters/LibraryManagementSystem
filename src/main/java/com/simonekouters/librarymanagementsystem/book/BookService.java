@@ -1,8 +1,6 @@
 package com.simonekouters.librarymanagementsystem.book;
 
 import com.simonekouters.librarymanagementsystem.author.Author;
-import com.simonekouters.librarymanagementsystem.book.Book;
-import com.simonekouters.librarymanagementsystem.book.BookRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,8 +15,7 @@ public class BookService {
         this.bookRepository = bookRepository;
     }
 
-    public Book createBook(String isbn, Book book) {
-        book.setIsbn(isbn); // make sure that the book we create will always have the isbn provide in URL
+    public Book createBook(Book book) {
         return bookRepository.save(book);
     }
 
@@ -32,5 +29,9 @@ public class BookService {
 
     public List<Book> findByAuthorIgnoringCaseContaining(Author author) {
         return bookRepository.findByAuthorIgnoringCaseContaining(author);
+    }
+
+    public void deleteByIsbn(String isbn) {
+        bookRepository.deleteById(isbn);
     }
 }

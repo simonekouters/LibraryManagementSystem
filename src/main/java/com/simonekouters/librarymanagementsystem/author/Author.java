@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 @Entity
 @Table(name = "authors")
@@ -18,5 +17,9 @@ public class Author {
 
     private String name;
 
-    private Integer age;
+    private Integer birthYear;
+
+    public Author(String name, Integer birthYear) {
+        this.name = name;
+    }
 }

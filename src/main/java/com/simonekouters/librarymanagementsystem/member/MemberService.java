@@ -1,7 +1,5 @@
 package com.simonekouters.librarymanagementsystem.member;
 
-import com.simonekouters.librarymanagementsystem.member.Member;
-import com.simonekouters.librarymanagementsystem.member.MemberRepository;
 import org.springframework.stereotype.Service;
 
 @Service

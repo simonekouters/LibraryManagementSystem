@@ -12,8 +12,4 @@ public class MemberController {
     public MemberController(MemberService memberService) {
         this.memberService = memberService;
     }
-
-    // Add a new member
-    // Update member information
-    // Delete member
 }

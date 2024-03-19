@@ -35,3 +35,4 @@ mvnw.cmd
 pom.xml
 target/classes/application.properties
 src/test/java/com/simonekouters/librarymanagementsystem/LibraryManagementSystemApplicationTests.java
+.idea/workspace.xml

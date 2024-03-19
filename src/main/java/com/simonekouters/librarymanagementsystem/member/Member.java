@@ -18,7 +18,5 @@ public class Member {
 
     private String name;
 
-    // private String password; -> add later + to MemberDto
 
-    // e-mail for sending due date reminder
 }
