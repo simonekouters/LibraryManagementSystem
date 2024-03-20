@@ -62,7 +62,7 @@ public class BookController {
         }
     }
 
-    @GetMapping("search/title/{isbn}")
+    @GetMapping("search/isbn/{isbn}")
     public ResponseEntity<BookDto> getByIsbn(@PathVariable String isbn) {
         Optional<Book> possibleBook = bookService.findByIsbn(isbn);
         return possibleBook
@@ -70,7 +70,7 @@ public class BookController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("search/title/{title}")
+    @GetMapping("search/title/{query}")
     public ResponseEntity<List<BookDto>> findTitlesContaining(@PathVariable String query) {
         List<BookDto> bookDtos = bookService.findByTitleIgnoringCaseContaining(query).stream()
                 .map(BookDto::from)

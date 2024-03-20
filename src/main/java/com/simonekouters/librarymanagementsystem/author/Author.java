@@ -21,6 +21,8 @@ public class Author {
 
     private Integer birthYear;
 
+    private String fullName;
+
     public Author(String firstName, String lastName, Integer birthYear) {
         this.firstName = firstName;
         this.lastName = lastName;
