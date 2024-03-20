@@ -43,10 +43,23 @@ public class Book {
 
     private static String isbnIsValid(BookDto bookDto) {
         var isbn = bookDto.isbn();
-        // remove any hyphens or spaces
+        if (isbn == null) {
+            return "A book requires an ISBN.";
+        }
+        // Remove any hyphens or spaces
         isbn = isbn.replaceAll("[\\s-]+", "");
-        // check if it's 13 characters long
-        if (isbn.length() != 13 || !isbn.matches("[0-9]")) {
+        // Check if it's 13 characters long
+        if (isbn.length() != 13 || !isbn.matches("[0-9]+")) {
+            return "A book requires an ISBN of 13 characters.";
+        }
+        // Validate ISBN-13 using Luhn algorithm
+        int sum = 0;
+        for (int i = 0; i < 12; i++) {
+            int digit = Character.getNumericValue(isbn.charAt(i));
+            sum += (i % 2 == 0) ? digit : digit * 3;
+        }
+        int checkDigit = Character.getNumericValue(isbn.charAt(12));
+        if (sum % 10 != checkDigit) {
             return "A book requires a valid ISBN";
         }
         return null;
@@ -71,14 +84,14 @@ public class Book {
     private static String authorIsValid(BookDto bookDto) {
         var author = AuthorMapper.toEntity(bookDto.authorDto());
 
-        if (author.getName() == null || author.getName().isBlank()) {
-            return "A book requires a (non blank) author name";
+        if (author.getFirstName() == null || author.getFirstName().isBlank()) {
+            return "A book requires a (non blank) author's first name.";
+        }
+        if (author.getLastName() == null || author.getLastName().isBlank()) {
+            return "A book requires a (non blank) author's last name.";
         }
         if (author.getId() != null) {
             return "Author should not contain an id value, as that is assigned by the database.";
-        }
-        if (!author.getName().matches("^[^,]+,\\s+[^,]+$")) {
-            return "Author name should be entered as 'firstname, lastname'.";
         }
         return null;
     }
