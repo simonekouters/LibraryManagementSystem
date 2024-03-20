@@ -16,6 +16,10 @@ public interface BookRepository extends JpaRepository<Book, String> {
     List<Book> findByTitleIgnoringCaseContaining(String title);
 
     // Custom query to find a book by either author's full name, first name or last name
-    @Query("SELECT b FROM Book b WHERE b.author.firstName LIKE %:name% OR b.author.lastName LIKE %:name%")
-    List<Book> findByAuthorNameIgnoringCaseContaining(@Param("name") String name);
+    @Query("SELECT b FROM Book b WHERE LOWER(b.author.firstName) LIKE LOWER(CONCAT('%', :name, '%')) " +
+            "OR LOWER(b.author.lastName) LIKE LOWER(CONCAT('%', :name, '%')) " +
+            "OR LOWER(CONCAT(b.author.firstName, ' ', b.author.lastName)) LIKE LOWER(CONCAT('%', :fullName, '%'))")
+    List<Book> findByAuthorNameIgnoringCaseContaining(@Param("name") String name, @Param("fullName") String fullName);
+
+
 }

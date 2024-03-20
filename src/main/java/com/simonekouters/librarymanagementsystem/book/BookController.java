@@ -78,7 +78,7 @@ public class BookController {
         return ResponseEntity.ok(bookDtos);
     }
 
-    @GetMapping("search/author/{author}")
+    @GetMapping("search/author/{name}")
     public ResponseEntity<List<BookDto>> findByAuthor(@PathVariable String name) {
         List<BookDto> bookDtos = bookService.findByAuthorIgnoringCaseContaining(name).stream()
                 .map(BookDto::from)
