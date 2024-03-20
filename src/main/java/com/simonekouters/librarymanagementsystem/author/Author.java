@@ -15,11 +15,15 @@ public class Author {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long id;
 
-    private String name;
+    private String firstName;
+
+    private String lastName;
 
     private Integer birthYear;
 
-    public Author(String name, Integer birthYear) {
-        this.name = name;
+    public Author(String firstName, String lastName, Integer birthYear) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.birthYear = birthYear;
     }
 }

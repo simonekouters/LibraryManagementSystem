@@ -27,8 +27,9 @@ public class BookService {
         return bookRepository.findByTitleIgnoringCaseContaining(title);
     }
 
-    public List<Book> findByAuthorIgnoringCaseContaining(Author author) {
-        return bookRepository.findByAuthorIgnoringCaseContaining(author);
+    public List<Book> findByAuthorIgnoringCaseContaining(String name) {
+        // name entered can either be full name, first name or last name
+        return bookRepository.findByAuthorIgnoringCaseContaining(name, name, name);
     }
 
     public void deleteByIsbn(String isbn) {

@@ -31,20 +31,20 @@ public class BookController {
         if (Book.isValid(bookDto).length > 0) {
             var requestProblems = Arrays.toString((Book.isValid(bookDto)));
             var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, requestProblems);
-            return ResponseEntity.badRequest().body(problemDetail); //// Implement separate ExceptionControllerAdvice class
+            return ResponseEntity.badRequest().body(problemDetail);
         }
         var isbn = bookDto.isbn().replaceAll("[\\s-]+", "");
         verifyThatBookDoesNotYetExist(isbn);
         var title = bookDto.title().trim();
 
-        Author author = authorService.findByName(bookDto.authorDto().name())
+        Author author = authorService.findByFullName(bookDto.authorDto().firstName(), bookDto.authorDto().lastName())
                 .stream()
-                // if there are several authors with same name, check birth year to find the right one
+                // If there are several authors with same name, check birth year to find the right one
                 .filter(a -> a.getBirthYear().equals(bookDto.authorDto().birthYear()))
                 .findFirst()
                 .orElseGet(() -> {
-                    Author newAuthor = new Author(bookDto.authorDto().name(), bookDto.authorDto().birthYear());
-                    // if author doesn't exist yet, save new author in database
+                    Author newAuthor = new Author(bookDto.authorDto().firstName(), bookDto.authorDto().lastName(), bookDto.authorDto().birthYear());
+                    // If author doesn't exist yet, save new author in database
                     authorService.createAuthor(newAuthor);
                     return newAuthor;
                 });
@@ -62,7 +62,7 @@ public class BookController {
         }
     }
 
-    @GetMapping("search/{isbn}")
+    @GetMapping("search/title/{isbn}")
     public ResponseEntity<BookDto> getByIsbn(@PathVariable String isbn) {
         Optional<Book> possibleBook = bookService.findByIsbn(isbn);
         return possibleBook
@@ -70,7 +70,7 @@ public class BookController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("search/{title}")
+    @GetMapping("search/title/{title}")
     public ResponseEntity<List<BookDto>> findTitlesContaining(@PathVariable String query) {
         List<BookDto> bookDtos = bookService.findByTitleIgnoringCaseContaining(query).stream()
                 .map(BookDto::from)
@@ -78,9 +78,12 @@ public class BookController {
         return ResponseEntity.ok(bookDtos);
     }
 
-    @GetMapping("search/{author}")
+    @GetMapping("search/author/{author}")
     public ResponseEntity<List<BookDto>> findByAuthor(@PathVariable String name) {
-
+        List<BookDto> bookDtos = bookService.findByAuthorIgnoringCaseContaining(name).stream()
+                .map(BookDto::from)
+                .toList();
+        return ResponseEntity.ok(bookDtos);
     }
 
 
