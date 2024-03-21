@@ -56,11 +56,14 @@ public class Book {
         int sum = 0;
         for (int i = 0; i < 12; i++) {
             int digit = Character.getNumericValue(isbn.charAt(i));
-            sum += (i % 2 == 0) ? digit : digit * 3;
+            sum += digit * (i % 2 == 0 ? 1 : 3);
         }
         int checkDigit = Character.getNumericValue(isbn.charAt(12));
-        if (sum % 10 != checkDigit) {
-            return "A book requires a valid ISBN";
+        int remainder = sum % 10;
+        int checksum = (10 - remainder) % 10;
+
+        if (checksum != checkDigit) {
+            return "A book requires a valid ISBN.";
         }
         return null;
     }
