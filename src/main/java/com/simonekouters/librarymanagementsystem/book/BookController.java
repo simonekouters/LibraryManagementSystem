@@ -38,14 +38,10 @@ public class BookController {
         verifyThatBookDoesNotYetExist(isbn);
         var title = bookDto.title().trim();
 
-        Author author = authorService.findByName(bookDto.authorDto().firstName(), bookDto.authorDto().lastName())
-                .stream()
-                // If there are several authors with same name, check birth year to find the right one
-                .filter(a -> a.getBirthYear().equals(bookDto.authorDto().birthYear()))
-                .findFirst()
+        // Check if the author already exists, if not, create a new author
+        Author author = authorService.findByNameAndBirthYear(bookDto.authorDto().firstName(), bookDto.authorDto().lastName(), bookDto.authorDto().birthYear())
                 .orElseGet(() -> {
                     Author newAuthor = new Author(bookDto.authorDto().firstName(), bookDto.authorDto().lastName(), bookDto.authorDto().birthYear());
-                    // If author doesn't exist yet, save new author in database
                     authorService.createAuthor(newAuthor);
                     return newAuthor;
                 });
