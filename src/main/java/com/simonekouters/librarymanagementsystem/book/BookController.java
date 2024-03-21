@@ -26,18 +26,19 @@ public class BookController {
         this.authorService = authorService;
     }
 
+
+
     @PostMapping
     public ResponseEntity<?> add(@RequestBody BookDto bookDto, UriComponentsBuilder ucb) {
         if (Book.isValid(bookDto).length > 0) {
-            var requestProblems = Arrays.toString((Book.isValid(bookDto)));
-            var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, requestProblems);
-            return ResponseEntity.badRequest().body(problemDetail);
+            var invalidBookArguments = Arrays.toString((Book.isValid(bookDto)));
+            throw new BadInputException(invalidBookArguments);
         }
         var isbn = bookDto.isbn().replaceAll("[\\s-]+", "");
         verifyThatBookDoesNotYetExist(isbn);
         var title = bookDto.title().trim();
 
-        Author author = authorService.findByFullName(bookDto.authorDto().firstName(), bookDto.authorDto().lastName())
+        Author author = authorService.findByName(bookDto.authorDto().firstName(), bookDto.authorDto().lastName())
                 .stream()
                 // If there are several authors with same name, check birth year to find the right one
                 .filter(a -> a.getBirthYear().equals(bookDto.authorDto().birthYear()))

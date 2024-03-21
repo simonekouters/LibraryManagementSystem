@@ -23,9 +23,8 @@ public class AuthorService {
         return authorRepository.findById(id);
     }
 
-    public List<Author> findByFullName(String firstName, String lastName) {
-        String fullName = formatAuthorName(firstName, lastName);
-        return authorRepository.findByFullName(fullName);
+    public List<Author> findByName(String firstName, String lastName) {
+        return authorRepository.findByFirstNameAndLastName(firstName, lastName);
     }
     public String formatAuthorName(String firstName, String lastName) {
         return lastName + ", " + firstName;

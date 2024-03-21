@@ -9,5 +9,5 @@ import java.util.Optional;
 
 @Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
-    List<Author> findByFullName(String fullName);
+    List<Author> findByFirstNameAndLastName(String firstName, String lastName);
 }
