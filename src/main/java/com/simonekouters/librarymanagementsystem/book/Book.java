@@ -96,6 +96,9 @@ public class Book {
         if (author.getId() != null) {
             return "Author should not contain an id value, as that is assigned by the database.";
         }
+        if (author.getBirthYear() == null || author.getBirthYear() < 0) {
+            return "An author requires a valid birth year.";
+        }
         return null;
     }
 }
