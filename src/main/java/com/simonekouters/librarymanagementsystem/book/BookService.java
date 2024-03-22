@@ -1,6 +1,5 @@
 package com.simonekouters.librarymanagementsystem.book;
 
-import com.simonekouters.librarymanagementsystem.author.Author;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.simonekouters.librarymanagementsystem.author;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -26,5 +25,9 @@ public class Author {
         this.firstName = firstName;
         this.lastName = lastName;
         this.birthYear = birthYear;
+    }
+
+    public String getFormattedAuthorName() {
+        return lastName + ", " + firstName;
     }
 }

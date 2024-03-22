@@ -2,16 +2,12 @@ package com.simonekouters.librarymanagementsystem.book;
 
 import com.simonekouters.librarymanagementsystem.author.Author;
 import com.simonekouters.librarymanagementsystem.author.AuthorMapper;
-import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
-import com.simonekouters.librarymanagementsystem.genre.Genre;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -85,7 +81,7 @@ public class Book {
     }
 
     private static String authorIsValid(BookDto bookDto) {
-        var author = AuthorMapper.toEntity(bookDto.authorDto());
+        var author = AuthorMapper.toEntity(bookDto.author());
 
         if (author.getFirstName() == null || author.getFirstName().isBlank()) {
             return "A book requires a (non blank) author's first name.";

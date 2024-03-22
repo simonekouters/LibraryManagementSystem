@@ -3,8 +3,6 @@ package com.simonekouters.librarymanagementsystem.book;
 import com.simonekouters.librarymanagementsystem.author.Author;
 import com.simonekouters.librarymanagementsystem.author.AuthorService;
 import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -39,9 +37,9 @@ public class BookController {
         var title = bookDto.title().trim();
 
         // Check if the author already exists, if not, create a new author
-        Author author = authorService.findByNameAndBirthYear(bookDto.authorDto().firstName(), bookDto.authorDto().lastName(), bookDto.authorDto().birthYear())
+        Author author = authorService.findByNameAndBirthYear(bookDto.author().firstName(), bookDto.author().lastName(), bookDto.author().birthYear())
                 .orElseGet(() -> {
-                    Author newAuthor = new Author(bookDto.authorDto().firstName(), bookDto.authorDto().lastName(), bookDto.authorDto().birthYear());
+                    Author newAuthor = new Author(bookDto.author().firstName(), bookDto.author().lastName(), bookDto.author().birthYear());
                     authorService.createAuthor(newAuthor);
                     return newAuthor;
                 });
@@ -49,7 +47,7 @@ public class BookController {
         var newBook = new Book(isbn, title, author, bookDto.publicationYear());
         bookService.createBook(newBook);
         URI locationOfNewBook = ucb.path("books/{isbn}").buildAndExpand(newBook.getIsbn()).toUri();
-        return ResponseEntity.created(locationOfNewBook).body(BookDto.from(newBook));
+        return ResponseEntity.created(locationOfNewBook).body(BookResponseDto.from(newBook));
     }
 
     private void verifyThatBookDoesNotYetExist(String isbn) {
@@ -59,28 +57,28 @@ public class BookController {
         }
     }
 
-    @GetMapping("search/isbn/{isbn}")
-    public ResponseEntity<BookDto> getByIsbn(@PathVariable String isbn) {
+    @GetMapping("search/isbns/{isbn}")
+    public ResponseEntity<BookResponseDto> getByIsbn(@PathVariable String isbn) {
         Optional<Book> possibleBook = bookService.findByIsbn(isbn);
         return possibleBook
-                .map(book -> ResponseEntity.ok(BookDto.from(book)))
+                .map(book -> ResponseEntity.ok(BookResponseDto.from(book)))
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("search/title/{query}")
-    public ResponseEntity<List<BookDto>> findTitlesContaining(@PathVariable String query) {
-        List<BookDto> bookDtos = bookService.findByTitleIgnoringCaseContaining(query).stream()
-                .map(BookDto::from)
+    @GetMapping("search/titles/{query}")
+    public ResponseEntity<List<BookResponseDto>> findTitlesContaining(@PathVariable String query) {
+        List<BookResponseDto> bookResponseDtos = bookService.findByTitleIgnoringCaseContaining(query).stream()
+                .map(BookResponseDto::from)
                 .toList();
-        return ResponseEntity.ok(bookDtos);
+        return ResponseEntity.ok(bookResponseDtos);
     }
 
-    @GetMapping("search/author/{name}")
-    public ResponseEntity<List<BookDto>> findByAuthor(@PathVariable String name) {
-        List<BookDto> bookDtos = bookService.findByAuthorIgnoringCaseContaining(name).stream()
-                .map(BookDto::from)
+    @GetMapping("search/authors/{name}")
+    public ResponseEntity<List<BookResponseDto>> findByAuthor(@PathVariable String name) {
+        List<BookResponseDto> bookResponseDtos = bookService.findByAuthorIgnoringCaseContaining(name).stream()
+                .map(BookResponseDto::from)
                 .toList();
-        return ResponseEntity.ok(bookDtos);
+        return ResponseEntity.ok(bookResponseDtos);
     }
 
 
@@ -92,4 +90,11 @@ public class BookController {
         } else return ResponseEntity.notFound().build();
     }
 
+
+//    @PatchMapping("{isbn}")              // requestbody BookDto instead?
+//    public ResponseEntity<BookDto> patch(@RequestBody Book changedBook, @PathVariable String isbn) {
+//        // isbns can be changed too, so should be in body, but should it also be in path?
+//
+//        // what if trying to change author name?
+//    }
 }

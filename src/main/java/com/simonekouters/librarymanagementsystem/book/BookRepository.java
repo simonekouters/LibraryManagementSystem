@@ -1,7 +1,5 @@
 package com.simonekouters.librarymanagementsystem.book;
 
-import com.simonekouters.librarymanagementsystem.author.Author;
-import com.simonekouters.librarymanagementsystem.book.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
