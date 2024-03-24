@@ -15,11 +15,8 @@ public class Author {
     private Long id;
 
     private String firstName;
-
     private String lastName;
-
     private Integer birthYear;
-
 
     public Author(String firstName, String lastName, Integer birthYear) {
         this.firstName = firstName;

@@ -26,4 +26,8 @@ public class AuthorService {
     public Optional<Author> findByNameAndBirthYear(String firstName, String lastName, Integer birthYear) {
         return authorRepository.findByFirstNameIgnoringCaseAndLastNameIgnoringCaseAndBirthYear(firstName, lastName, birthYear);
     }
+
+    public List<Author> findAll() {
+        return authorRepository.findAll();
+    }
 }
