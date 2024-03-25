@@ -8,7 +8,7 @@ import java.util.List;
 
 public class Validation {
     public static List<String> isValid(BookDto bookDto) {
-        var allErrors = new ArrayList<String>(Arrays.asList(isbnIsValid(bookDto), publicationYearIsValid(bookDto),
+        var allErrors = new ArrayList<>(Arrays.asList(isbnIsValid(bookDto), publicationYearIsValid(bookDto),
                 titleIsValid(bookDto)));
         allErrors.addAll(authorIsValid(bookDto));
         return allErrors.stream()

@@ -43,63 +43,83 @@ public class BookService {
     }
 
     public Book updateExistingBook(Book originalBook, BookDto changedBook) {
-        var newIsbn = changedBook.isbn();
-        // check if a book with that ISBN doesn't exist yet
-        verifyThatBookDoesNotYetExist(newIsbn);
+        String newIsbn = changedBook.isbn();
         if (newIsbn != null) {
-            if (Validation.isbnIsValid(changedBook) != null) {
-                throw new BadInputException(Validation.isbnIsValid(changedBook));
-            } else {
-                originalBook.setIsbn(newIsbn);
-            }
+            validateAndSetIsbn(originalBook, changedBook, newIsbn);
         }
 
-        var author = Author.from(changedBook.author());
-        var newAuthorFirstName = changedBook.author().firstName();
+        Author author = Author.from(changedBook.author());
+        String newAuthorFirstName = author.getFirstName();
         if (newAuthorFirstName != null) {
-            if (Validation.authorFirstNameIsValid(author) != null) {
-                throw new BadInputException(Validation.authorFirstNameIsValid(author));
-            } else {
-                originalBook.getAuthor().setFirstName(newAuthorFirstName);
-            }
+            validateAndSetAuthorFirstName(originalBook, author, newAuthorFirstName);
         }
 
-        var newAuthorLastName = changedBook.author().lastName();
+        String newAuthorLastName = author.getLastName();
         if (newAuthorLastName != null) {
-            if (Validation.authorLastNameIsValid(author) != null) {
-                throw new BadInputException(Validation.authorLastNameIsValid(author));
-            } else {
-                originalBook.getAuthor().setLastName(newAuthorLastName);
-            }
+            validateAndSetAuthorLastName(originalBook, author, newAuthorLastName);
         }
 
-        var newAuthorBirthYear = changedBook.author().birthYear();
+        Integer newAuthorBirthYear = author.getBirthYear();
         if (newAuthorBirthYear != null) {
-            if (Validation.authorBirthYearIsValid(author) != null) {
-                throw new BadInputException(Validation.authorBirthYearIsValid(author));
-            } else {
-                originalBook.getAuthor().setBirthYear(newAuthorBirthYear);
-            }
+            validateAndSetAuthorBirthYear(originalBook, author, newAuthorBirthYear);
         }
 
-        var newTitle = changedBook.title();
+        String newTitle = changedBook.title();
         if (newTitle != null) {
-            if (Validation.titleIsValid(changedBook) != null) {
-                throw new BadInputException(Validation.titleIsValid(changedBook));
-            } else {
-                originalBook.setTitle(newTitle);
-            }
+            validateAndSetTitle(originalBook, changedBook, newTitle);
         }
 
-        var newPublicationYear = changedBook.publicationYear();
+        Integer newPublicationYear = changedBook.publicationYear();
         if (newPublicationYear != null) {
-            if (Validation.publicationYearIsValid(changedBook) != null) {
-                throw new BadInputException(Validation.publicationYearIsValid(changedBook));
-            } else {
-                originalBook.setPublicationYear(newPublicationYear);
-            }
+            validateAndSetPublicationYear(originalBook, changedBook, newPublicationYear);
         }
         return bookRepository.save(originalBook);
+    }
+
+    private void validateAndSetIsbn(Book originalBook, BookDto changedBook, String newIsbn) {
+        verifyThatBookDoesNotYetExist(newIsbn);
+        String isbnValidationResult = Validation.isbnIsValid(changedBook);
+        if (isbnValidationResult != null) {
+            throw new BadInputException(isbnValidationResult);
+        }
+        originalBook.setIsbn(newIsbn);
+    }
+
+    private void validateAndSetTitle(Book originalBook, BookDto changedBook, String newTitle) {
+        String titleValidationResult = Validation.titleIsValid(changedBook);
+        if (titleValidationResult != null) {
+            throw new BadInputException(titleValidationResult);
+        }
+        originalBook.setTitle(newTitle);
+    }
+
+    private void validateAndSetPublicationYear(Book originalBook, BookDto changedBook, Integer newPublicationYear) {
+        String publicationYearValidationResult = Validation.publicationYearIsValid(changedBook);
+        if (publicationYearValidationResult != null) {
+            throw new BadInputException(publicationYearValidationResult);
+        }
+        originalBook.setPublicationYear(newPublicationYear);
+    }
+
+    private void validateAndSetAuthorFirstName(Book originalBook, Author author, String newAuthorFirstName) {
+        if (Validation.authorFirstNameIsValid(author) != null) {
+            throw new BadInputException(Validation.authorFirstNameIsValid(author));
+        }
+        originalBook.getAuthor().setFirstName(newAuthorFirstName);
+    }
+
+    private void validateAndSetAuthorLastName(Book originalBook, Author author, String newAuthorLastName) {
+        if (Validation.authorLastNameIsValid(author) != null) {
+            throw new BadInputException(Validation.authorLastNameIsValid(author));
+        }
+        originalBook.getAuthor().setLastName(newAuthorLastName);
+    }
+
+    private void validateAndSetAuthorBirthYear(Book originalBook, Author author, Integer newAuthorBirthYear) {
+        if (Validation.authorBirthYearIsValid(author) != null) {
+            throw new BadInputException(Validation.authorBirthYearIsValid(author));
+        }
+        originalBook.getAuthor().setBirthYear(newAuthorBirthYear);
     }
 
     private void verifyThatBookDoesNotYetExist(String isbn) {

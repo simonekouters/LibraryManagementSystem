@@ -1,7 +1,6 @@
 package com.simonekouters.librarymanagementsystem.book;
 
 import com.simonekouters.librarymanagementsystem.author.AuthorService;
-import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
