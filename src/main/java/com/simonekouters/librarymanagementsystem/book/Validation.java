@@ -3,14 +3,18 @@ package com.simonekouters.librarymanagementsystem.book;
 import com.simonekouters.librarymanagementsystem.author.Author;
 import com.simonekouters.librarymanagementsystem.author.AuthorMapper;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 public class Validation {
-    public static String[] isValid(BookDto bookDto) {
-        return Arrays.stream(new String[]{isbnIsValid(bookDto), publicationYearIsValid(bookDto),
-                        titleIsValid(bookDto), authorIsValid(bookDto)})
+    public static List<String> isValid(BookDto bookDto) {
+        var allErrors = new ArrayList<String>(Arrays.asList(isbnIsValid(bookDto), publicationYearIsValid(bookDto),
+                titleIsValid(bookDto)));
+        allErrors.addAll(authorIsValid(bookDto));
+        return allErrors.stream()
                 .filter(value -> value != null)
-                .toArray(String[]::new);
+                .toList();
     }
 
     public static String isbnIsValid(BookDto bookDto) {
@@ -56,12 +60,12 @@ public class Validation {
         return null;
     }
 
-    public static String authorIsValid(BookDto bookDto) {
+    public static List<String> authorIsValid(BookDto bookDto) {
         var author = AuthorMapper.toEntity(bookDto.author());
         if (author.getId() != null) {
-            return "Author should not contain an id value, as that is assigned by the database.";
+            return List.of("Author should not contain an id value, as that is assigned by the database.");
         }
-        return authorFirstNameIsValid(author) + authorLastNameIsValid(author) + authorBirthYearIsValid(author);
+        return Arrays.asList(authorFirstNameIsValid(author), authorLastNameIsValid(author), authorBirthYearIsValid(author));
     }
 
     public static String authorFirstNameIsValid(Author author) {
@@ -84,6 +88,4 @@ public class Validation {
         }
         return null;
     }
-
-
 }
