@@ -24,6 +24,10 @@ public class Author {
         this.birthYear = birthYear;
     }
 
+    public static Author from(AuthorDto authorDto) {
+        return new Author(authorDto.firstName(), authorDto.lastName(), authorDto.birthYear());
+    }
+
     public String getFormattedAuthorName() {
         return lastName + ", " + firstName;
     }

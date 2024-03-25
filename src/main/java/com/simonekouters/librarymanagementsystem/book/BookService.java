@@ -1,14 +1,11 @@
 package com.simonekouters.librarymanagementsystem.book;
 
 import com.simonekouters.librarymanagementsystem.author.Author;
-import com.simonekouters.librarymanagementsystem.author.AuthorMapper;
 import com.simonekouters.librarymanagementsystem.author.AuthorService;
 import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
 import jakarta.transaction.Transactional;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +44,8 @@ public class BookService {
 
     public Book updateExistingBook(Book originalBook, BookDto changedBook) {
         var newIsbn = changedBook.isbn();
+        // check if a book with that ISBN doesn't exist yet
+        verifyThatBookDoesNotYetExist(newIsbn);
         if (newIsbn != null) {
             if (Validation.isbnIsValid(changedBook) != null) {
                 throw new BadInputException(Validation.isbnIsValid(changedBook));
@@ -55,7 +54,7 @@ public class BookService {
             }
         }
 
-        var author = AuthorMapper.toEntity(changedBook.author());
+        var author = Author.from(changedBook.author());
         var newAuthorFirstName = changedBook.author().firstName();
         if (newAuthorFirstName != null) {
             if (Validation.authorFirstNameIsValid(author) != null) {
@@ -106,7 +105,7 @@ public class BookService {
     private void verifyThatBookDoesNotYetExist(String isbn) {
         var possibleExistingBook = findByIsbn(isbn);
         if (possibleExistingBook.isPresent()) {
-            throw new BadInputException("Book already exists");
+            throw new BadInputException("A book with that ISBN already exists");
         }
     }
 

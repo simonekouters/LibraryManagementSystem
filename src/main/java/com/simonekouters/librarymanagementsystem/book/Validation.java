@@ -1,7 +1,6 @@
 package com.simonekouters.librarymanagementsystem.book;
 
 import com.simonekouters.librarymanagementsystem.author.Author;
-import com.simonekouters.librarymanagementsystem.author.AuthorMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -61,7 +60,7 @@ public class Validation {
     }
 
     public static List<String> authorIsValid(BookDto bookDto) {
-        var author = AuthorMapper.toEntity(bookDto.author());
+        var author = Author.from(bookDto.author());
         if (author.getId() != null) {
             return List.of("Author should not contain an id value, as that is assigned by the database.");
         }

@@ -20,13 +20,11 @@ public class BookController {
         this.bookService = bookService;
     }
 
-
     @PostMapping
     public ResponseEntity<?> add(@RequestBody BookDto bookDto, UriComponentsBuilder ucb) {
-            Book newBook = bookService.createNewBook(bookDto);
-            URI locationOfNewBook = ucb.path("books/{isbn}").buildAndExpand(newBook.getIsbn()).toUri();
-            return ResponseEntity.created(locationOfNewBook).body(BookResponseDto.from(newBook));
-
+        Book newBook = bookService.createNewBook(bookDto);
+        URI locationOfNewBook = ucb.path("books/{isbn}").buildAndExpand(newBook.getIsbn()).toUri();
+        return ResponseEntity.created(locationOfNewBook).body(BookResponseDto.from(newBook));
     }
 
     @GetMapping("search/isbns/{isbn}")
@@ -64,21 +62,14 @@ public class BookController {
 
 
     @PatchMapping("{isbn}")
-    public ResponseEntity<BookDto> patch(@RequestBody BookDto changedBook) {
-        var isbnFromBody = changedBook.isbn();
-        var possibleOriginalBook = bookService.findByIsbn(isbnFromBody);
+    public ResponseEntity<BookDto> patch(@PathVariable String isbn, @RequestBody BookDto changedBook) {
+        var possibleOriginalBook = bookService.findByIsbn(isbn);
         if (possibleOriginalBook.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
         var originalBook = possibleOriginalBook.get();
 
-        try {
-            Book updatedBook = bookService.updateExistingBook(originalBook, changedBook);
-            return ResponseEntity.ok(BookDto.from(updatedBook));
-        } catch (BadInputException e) {
-            System.out.println(e.getMessage());
-        }
-        return ResponseEntity.badRequest().build();
-
+        Book updatedBook = bookService.updateExistingBook(originalBook, changedBook);
+        return ResponseEntity.ok(BookDto.from(updatedBook));
     }
 }
