@@ -45,7 +45,7 @@ public class Validation {
 
     public static String publicationYearIsValid(BookDto bookDto) {
         var publicationYear = bookDto.publicationYear();
-        if (publicationYear == null || publicationYear < 0) {
+        if (publicationYear == null || publicationYear < 0 || !Integer.toString(publicationYear).matches("\\d{0,4}")) {
             return "A book requires a positive publication year";
         }
         return null;
@@ -82,7 +82,7 @@ public class Validation {
     }
 
     public static String authorBirthYearIsValid(Author author) {
-        if (author.getBirthYear() == null || author.getBirthYear() < 0) {
+        if (author.getBirthYear() == null || author.getBirthYear() < 0 || !Integer.toString(author.getBirthYear()).matches("\\d{0,4}")) {
             return "An author requires a valid birth year.";
         }
         return null;
