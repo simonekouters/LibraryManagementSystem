@@ -4,9 +4,10 @@ import com.simonekouters.librarymanagementsystem.author.Author;
 import com.simonekouters.librarymanagementsystem.author.AuthorService;
 import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
 import jakarta.transaction.Transactional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -133,12 +134,12 @@ public class BookService {
         return bookRepository.findByIsbn(isbn);
     }
 
-    public List<Book> findByTitleIgnoringCaseContaining(String title) {
-        return bookRepository.findByTitleIgnoringCaseContaining(title);
+    public Page<Book> findByTitleIgnoringCaseContaining(String title, Pageable pageable) {
+        return bookRepository.findByTitleIgnoringCaseContaining(title, pageable);
     }
 
-    public List<Book> findByAuthorIgnoringCaseContaining(String name) {
-        return bookRepository.findByAuthorNameIgnoringCaseContaining(name, name);
+    public Page<Book> findByAuthorIgnoringCaseContaining(String name, Pageable pageable) {
+        return bookRepository.findByAuthorNameIgnoringCaseContaining(name, name, pageable);
     }
 
     public void deleteByIsbn(String isbn) {

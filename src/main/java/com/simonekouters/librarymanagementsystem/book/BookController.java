@@ -1,12 +1,13 @@
 package com.simonekouters.librarymanagementsystem.book;
 
 import com.simonekouters.librarymanagementsystem.author.AuthorService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -35,21 +36,18 @@ public class BookController {
     }
 
     @GetMapping("search/titles/{query}")
-    public ResponseEntity<List<BookResponseDto>> findTitlesContaining(@PathVariable String query) {
-        List<BookResponseDto> bookResponseDtos = bookService.findByTitleIgnoringCaseContaining(query).stream()
-                .map(BookResponseDto::from)
-                .toList();
-        return ResponseEntity.ok(bookResponseDtos);
+    public ResponseEntity<Page<BookResponseDto>> findTitlesContaining(@PathVariable String query, Pageable pageable) {
+        Page<BookResponseDto> bookResponsePage = bookService.findByTitleIgnoringCaseContaining(query, pageable)
+                .map(BookResponseDto::from);
+        return ResponseEntity.ok(bookResponsePage);
     }
 
     @GetMapping("search/authors/{name}")
-    public ResponseEntity<List<BookResponseDto>> findByAuthor(@PathVariable String name) {
-        List<BookResponseDto> bookResponseDtos = bookService.findByAuthorIgnoringCaseContaining(name).stream()
-                .map(BookResponseDto::from)
-                .toList();
-        return ResponseEntity.ok(bookResponseDtos);
+    public ResponseEntity<Page<BookResponseDto>> findByAuthor(@PathVariable String name, Pageable pageable) {
+        Page<BookResponseDto> bookResponsePage = bookService.findByAuthorIgnoringCaseContaining(name, pageable)
+                .map(BookResponseDto::from);
+        return ResponseEntity.ok(bookResponsePage);
     }
-
 
     @DeleteMapping("{isbn}")
     public ResponseEntity<Void> delete(@PathVariable String isbn) {
