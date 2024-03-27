@@ -1,10 +1,16 @@
 package com.simonekouters.librarymanagementsystem.author;
 
+import com.simonekouters.librarymanagementsystem.book.Book;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-@Data
+import java.util.Set;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "authors")
@@ -17,6 +23,11 @@ public class Author {
     private String firstName;
     private String lastName;
     private Integer birthYear;
+
+    @OneToMany
+    private Set<Book> books;
+
+    private boolean hasBeenDeleted = false;
 
     public Author(String firstName, String lastName, Integer birthYear) {
         this.firstName = firstName;

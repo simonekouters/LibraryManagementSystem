@@ -2,7 +2,6 @@ package com.simonekouters.librarymanagementsystem.author;
 
 import com.simonekouters.librarymanagementsystem.book.Validation;
 import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
-import org.apache.coyote.BadRequestException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ public class AuthorService {
         this.authorRepository = authorRepository;
     }
 
-    public Author createAuthor (Author author) {
+    public Author save (Author author) {
         return authorRepository.save(author);
     }
 
@@ -31,7 +30,7 @@ public class AuthorService {
     }
 
     public Page<Author> findAll(Pageable pageable) {
-        return authorRepository.findAll(pageable);
+        return authorRepository.findAllByHasBeenDeletedFalse(pageable);
     }
 
     public Author updateAuthor(Author originalAuthor, AuthorDto changedAuthor) {

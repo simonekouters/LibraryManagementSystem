@@ -35,7 +35,7 @@ public class BookService {
         Author author = authorService.findByNameAndBirthYear(book.author().firstName(), book.author().lastName(), book.author().birthYear())
                 .orElseGet(() -> {
                     Author newAuthor = new Author(book.author().firstName(), book.author().lastName(), book.author().birthYear());
-                    authorService.createAuthor(newAuthor);
+                    authorService.save(newAuthor);
                     return newAuthor;
                 });
 

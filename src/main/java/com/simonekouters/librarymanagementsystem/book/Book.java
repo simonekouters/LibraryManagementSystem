@@ -22,7 +22,6 @@ public class Book {
     private Author author;
 
     private Integer publicationYear;
-
     private boolean hasBeenDeleted = false;
 
     public Book(String isbn, String title, Author author, Integer publicationYear) {
@@ -31,5 +30,4 @@ public class Book {
         this.author = author;
         this.publicationYear = publicationYear;
     }
-    
 }
