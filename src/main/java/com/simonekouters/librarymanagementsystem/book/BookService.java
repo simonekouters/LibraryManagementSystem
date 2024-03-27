@@ -147,4 +147,18 @@ public class BookService {
         return bookRepository.findByAuthorNameIgnoringCaseContaining(name, name, pageable);
     }
 
+    public void delete(Book book) {
+        book.setHasBeenDeleted(true);
+        save(book);
+
+        // if an author doesn't have any books in the system anymore, (soft) delete the author
+        Author author = book.getAuthor();
+        boolean hasNonDeletedBooks = author.getBooks().stream()
+                .anyMatch(b -> !b.isHasBeenDeleted());
+
+        if (!hasNonDeletedBooks) {
+            author.setHasBeenDeleted(true);
+            authorService.save(author);
+        }
+    }
 }

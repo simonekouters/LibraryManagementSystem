@@ -1,7 +1,5 @@
 package com.simonekouters.librarymanagementsystem.book;
 
-import com.simonekouters.librarymanagementsystem.author.Author;
-import com.simonekouters.librarymanagementsystem.author.AuthorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -16,11 +14,9 @@ import java.util.Optional;
 public class BookController {
 
     private final BookService bookService;
-    private final AuthorService authorService;
 
-    public BookController(BookService bookService, AuthorService authorService) {
+    public BookController(BookService bookService) {
         this.bookService = bookService;
-        this.authorService = authorService;
     }
 
     @PostMapping
@@ -56,18 +52,7 @@ public class BookController {
         Optional<Book> optionalBook = bookService.findByIsbn(isbn);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
-            book.setHasBeenDeleted(true);
-            bookService.save(book);
-
-            // if an author doesn't have any books in the system anymore, (soft) delete the author
-            Author author = book.getAuthor();
-            boolean hasNonDeletedBooks = author.getBooks().stream()
-                    .anyMatch(b -> !b.isHasBeenDeleted());
-
-            if (!hasNonDeletedBooks) {
-                author.setHasBeenDeleted(true);
-                authorService.save(author);
-            }
+            bookService.delete(book);
             return ResponseEntity.noContent().build();
         } else {
             return ResponseEntity.notFound().build();
