@@ -40,17 +40,15 @@ public class BookController {
     }
 
     @GetMapping("search/titles/{query}")
-    public ResponseEntity<Page<BookResponseDto>> findTitlesContaining(@PathVariable("query") String query, Pageable pageable) {
-        Page<BookResponseDto> bookResponsePage = bookService.findByTitleIgnoringCaseContaining(query, pageable)
+    public Page<BookResponseDto> findTitlesContaining(@PathVariable("query") String query, Pageable pageable) {
+        return bookService.findByTitleIgnoringCaseContaining(query, pageable)
                 .map(BookResponseDto::from);
-        return ResponseEntity.ok(bookResponsePage);
     }
 
     @GetMapping("search/authors/{name}")
-    public ResponseEntity<Page<BookResponseDto>> findByAuthor(@PathVariable("name") String name, Pageable pageable) {
-        Page<BookResponseDto> bookResponsePage = bookService.findByAuthorIgnoringCaseContaining(name, pageable)
+    public Page<BookResponseDto> findByAuthor(@PathVariable("name") String name, Pageable pageable) {
+        return bookService.findByAuthorIgnoringCaseContaining(name, pageable)
                 .map(BookResponseDto::from);
-        return ResponseEntity.ok(bookResponsePage);
     }
 
     @DeleteMapping("{isbn}")
