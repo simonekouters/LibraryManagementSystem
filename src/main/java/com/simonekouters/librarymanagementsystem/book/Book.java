@@ -2,11 +2,10 @@ package com.simonekouters.librarymanagementsystem.book;
 
 import com.simonekouters.librarymanagementsystem.author.Author;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -24,6 +23,13 @@ public class Book {
 
     private Integer publicationYear;
 
-//    @ManyToMany
-//    private Set<Genre> genres = new HashSet<>();
+    private boolean hasBeenDeleted = false;
+
+    public Book(String isbn, String title, Author author, Integer publicationYear) {
+        this.isbn = isbn;
+        this.title = title;
+        this.author = author;
+        this.publicationYear = publicationYear;
+    }
+    
 }

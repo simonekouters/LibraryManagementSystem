@@ -27,8 +27,9 @@ public class BookController {
         return ResponseEntity.created(locationOfNewBook).body(BookResponseDto.from(newBook));
     }
 
+
     @GetMapping("search/isbns/{isbn}")
-    public ResponseEntity<BookResponseDto> getByIsbn(@PathVariable String isbn) {
+    public ResponseEntity<BookResponseDto> getByIsbn(@PathVariable("isbn") String isbn) {
         Optional<Book> possibleBook = bookService.findByIsbn(isbn);
         return possibleBook
                 .map(book -> ResponseEntity.ok(BookResponseDto.from(book)))
@@ -36,23 +37,26 @@ public class BookController {
     }
 
     @GetMapping("search/titles/{query}")
-    public ResponseEntity<Page<BookResponseDto>> findTitlesContaining(@PathVariable String query, Pageable pageable) {
+    public ResponseEntity<Page<BookResponseDto>> findTitlesContaining(@PathVariable("query") String query, Pageable pageable) {
         Page<BookResponseDto> bookResponsePage = bookService.findByTitleIgnoringCaseContaining(query, pageable)
                 .map(BookResponseDto::from);
         return ResponseEntity.ok(bookResponsePage);
     }
 
     @GetMapping("search/authors/{name}")
-    public ResponseEntity<Page<BookResponseDto>> findByAuthor(@PathVariable String name, Pageable pageable) {
+    public ResponseEntity<Page<BookResponseDto>> findByAuthor(@PathVariable("name") String name, Pageable pageable) {
         Page<BookResponseDto> bookResponsePage = bookService.findByAuthorIgnoringCaseContaining(name, pageable)
                 .map(BookResponseDto::from);
         return ResponseEntity.ok(bookResponsePage);
     }
 
     @DeleteMapping("{isbn}")
-    public ResponseEntity<Void> delete(@PathVariable String isbn) {
-        if (bookService.findByIsbn(isbn).isPresent()) {
-            bookService.deleteByIsbn(isbn);
+    public ResponseEntity<Void> delete(@PathVariable("isbn") String isbn) {
+        Optional<Book> optionalBook = bookService.findByIsbn(isbn);
+        if (optionalBook.isPresent()) {
+            Book book = optionalBook.get();
+            book.setHasBeenDeleted(true);
+            bookService.save(book);
             return ResponseEntity.noContent().build();
         } else return ResponseEntity.notFound().build();
     }

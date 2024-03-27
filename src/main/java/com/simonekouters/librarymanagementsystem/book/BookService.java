@@ -43,6 +43,11 @@ public class BookService {
         return bookRepository.save(newBook);
     }
 
+    @Transactional
+    public Book save(Book book) {
+        return bookRepository.save(book);
+    }
+
     public Book updateExistingBook(Book originalBook, BookDto changedBook) {
         String newIsbn = changedBook.isbn();
         if (newIsbn != null) {
@@ -131,18 +136,15 @@ public class BookService {
     }
 
     public Optional<Book> findByIsbn(String isbn) {
-        return bookRepository.findByIsbn(isbn);
+        return bookRepository.findByIsbnAndHasBeenDeletedFalse(isbn);
     }
 
     public Page<Book> findByTitleIgnoringCaseContaining(String title, Pageable pageable) {
-        return bookRepository.findByTitleIgnoringCaseContaining(title, pageable);
+        return bookRepository.findByTitleIgnoringCaseContainingAndHasBeenDeletedFalse(title, pageable);
     }
 
     public Page<Book> findByAuthorIgnoringCaseContaining(String name, Pageable pageable) {
         return bookRepository.findByAuthorNameIgnoringCaseContaining(name, name, pageable);
     }
 
-    public void deleteByIsbn(String isbn) {
-        bookRepository.deleteById(isbn);
-    }
 }
