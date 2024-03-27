@@ -24,7 +24,7 @@ public class Author {
     private String lastName;
     private Integer birthYear;
 
-    @OneToMany
+    @OneToMany(mappedBy = "author")
     private Set<Book> books;
 
     private boolean hasBeenDeleted = false;

@@ -61,14 +61,19 @@ public class BookController {
             book.setHasBeenDeleted(true);
             bookService.save(book);
 
-            // if an author doesn't have any books in the system anymore, (soft) delete the author 
+            // if an author doesn't have any books in the system anymore, (soft) delete the author
             Author author = book.getAuthor();
-            if (author.getBooks().isEmpty()) {
+            boolean hasNonDeletedBooks = author.getBooks().stream()
+                    .anyMatch(b -> !b.isHasBeenDeleted());
+
+            if (!hasNonDeletedBooks) {
                 author.setHasBeenDeleted(true);
                 authorService.save(author);
             }
             return ResponseEntity.noContent().build();
-        } else return ResponseEntity.notFound().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 
