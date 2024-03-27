@@ -1,13 +1,14 @@
 package com.simonekouters.librarymanagementsystem.author;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import com.simonekouters.librarymanagementsystem.book.Book;
+import com.simonekouters.librarymanagementsystem.book.BookResponseDto;
+import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("authors")
@@ -21,13 +22,20 @@ public class AuthorController {
 
     @GetMapping
     public Page<AuthorResponseDto> getAll(Pageable pageable) {
-        Pageable pageRequest = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                Sort.by(Sort.Direction.ASC, "lastName")
-        );
-        return authorService.findAll(pageRequest)
+        return authorService.findAll(pageable)
                 .map(AuthorResponseDto::from);
+    }
+
+    @GetMapping("{id}/books")
+    public ResponseEntity<Page<BookResponseDto>> getAllBooksByAuthorId(@PathVariable("id") Long id, Pageable pageable) {
+        Optional<Author> optionalAuthor = authorService.findById(id);
+        if (optionalAuthor.isPresent()) {
+            Author author = optionalAuthor.get();
+            Page<BookResponseDto> bookResponsePage = authorService.getAllBooksByAuthorId(author, pageable);
+            return ResponseEntity.ok(bookResponsePage);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PatchMapping("{id}")

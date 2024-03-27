@@ -1,11 +1,14 @@
 package com.simonekouters.librarymanagementsystem.author;
 
+import com.simonekouters.librarymanagementsystem.book.Book;
+import com.simonekouters.librarymanagementsystem.book.BookResponseDto;
 import com.simonekouters.librarymanagementsystem.book.Validation;
 import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,7 +33,23 @@ public class AuthorService {
     }
 
     public Page<Author> findAll(Pageable pageable) {
-        return authorRepository.findAllByHasBeenDeletedFalse(pageable);
+        Pageable pageRequest = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.ASC, "lastName")
+        );
+        return authorRepository.findAllByHasBeenDeletedFalse(pageRequest);
+    }
+
+    public Page<BookResponseDto> getAllBooksByAuthorId(Author author, Pageable pageable) {
+        Pageable pageRequest = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize(),
+                Sort.by(Sort.Direction.DESC, "publicationYear")
+        );
+        List<Book> books = new ArrayList<>(author.getBooks());
+        Page<Book> bookPage = new PageImpl<>(books, pageRequest, books.size());
+        return bookPage.map(BookResponseDto::from);
     }
 
     public Author updateAuthor(Author originalAuthor, AuthorDto changedAuthor) {
