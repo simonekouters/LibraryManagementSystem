@@ -44,8 +44,8 @@ public class BookService {
     }
 
     @Transactional
-    public Book save(Book book) {
-        return bookRepository.save(book);
+    public void save(Book book) {
+        bookRepository.save(book);
     }
 
     public Book updateExistingBook(Book originalBook, BookDto changedBook) {
@@ -54,25 +54,13 @@ public class BookService {
             validateAndSetIsbn(originalBook, changedBook, newIsbn);
         }
 
-        Author author = Author.from(changedBook.author());
-        String newAuthorFirstName = author.getFirstName();
-        if (newAuthorFirstName != null) {
-            validateAndSetAuthorFirstName(originalBook, author, newAuthorFirstName);
-        }
-
-        String newAuthorLastName = author.getLastName();
-        if (newAuthorLastName != null) {
-            validateAndSetAuthorLastName(originalBook, author, newAuthorLastName);
-        }
-
-        Integer newAuthorBirthYear = author.getBirthYear();
-        if (newAuthorBirthYear != null) {
-            validateAndSetAuthorBirthYear(originalBook, author, newAuthorBirthYear);
-        }
-
         String newTitle = changedBook.title();
         if (newTitle != null) {
             validateAndSetTitle(originalBook, changedBook, newTitle);
+        }
+
+        if (changedBook.author() != null) {
+            throw new BadInputException("Authors can only be updated separately.");
         }
 
         Integer newPublicationYear = changedBook.publicationYear();
@@ -105,27 +93,6 @@ public class BookService {
             throw new BadInputException(publicationYearValidationResult);
         }
         originalBook.setPublicationYear(newPublicationYear);
-    }
-
-    private void validateAndSetAuthorFirstName(Book originalBook, Author author, String newAuthorFirstName) {
-        if (Validation.authorFirstNameIsValid(author) != null) {
-            throw new BadInputException(Validation.authorFirstNameIsValid(author));
-        }
-        originalBook.getAuthor().setFirstName(newAuthorFirstName);
-    }
-
-    private void validateAndSetAuthorLastName(Book originalBook, Author author, String newAuthorLastName) {
-        if (Validation.authorLastNameIsValid(author) != null) {
-            throw new BadInputException(Validation.authorLastNameIsValid(author));
-        }
-        originalBook.getAuthor().setLastName(newAuthorLastName);
-    }
-
-    private void validateAndSetAuthorBirthYear(Book originalBook, Author author, Integer newAuthorBirthYear) {
-        if (Validation.authorBirthYearIsValid(author) != null) {
-            throw new BadInputException(Validation.authorBirthYearIsValid(author));
-        }
-        originalBook.getAuthor().setBirthYear(newAuthorBirthYear);
     }
 
     private void verifyThatBookDoesNotYetExist(String isbn) {

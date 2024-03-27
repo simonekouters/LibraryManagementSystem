@@ -1,5 +1,6 @@
 package com.simonekouters.librarymanagementsystem.book;
 
+import com.simonekouters.librarymanagementsystem.author.AuthorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,11 @@ import java.util.Optional;
 public class BookController {
 
     private final BookService bookService;
+    private final AuthorService authorService;
 
-    public BookController(BookService bookService) {
+    public BookController(BookService bookService, AuthorService authorService) {
         this.bookService = bookService;
+        this.authorService = authorService;
     }
 
     @PostMapping
@@ -61,7 +64,7 @@ public class BookController {
 
 
     @PatchMapping("{isbn}")
-    public ResponseEntity<BookDto> patch(@PathVariable String isbn, @RequestBody BookDto changedBook) {
+    public ResponseEntity<BookDto> updateBookDetails(@PathVariable String isbn, @RequestBody BookDto changedBook) {
         var possibleOriginalBook = bookService.findByIsbn(isbn);
         if (possibleOriginalBook.isEmpty()) {
             return ResponseEntity.notFound().build();
@@ -70,5 +73,24 @@ public class BookController {
 
         Book updatedBook = bookService.updateExistingBook(originalBook, changedBook);
         return ResponseEntity.ok(BookDto.from(updatedBook));
+    }
+
+    @PatchMapping("{isbn}/author/{id}")
+    public ResponseEntity<BookDto> changeBookAuthor(@PathVariable String isbn, @PathVariable Long id) {
+        var possiblyExistingBook = bookService.findByIsbn(isbn);
+        if (possiblyExistingBook.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        var book = possiblyExistingBook.get();
+
+        var possiblyExistingAuthor = authorService.findById(id);
+        if (possiblyExistingAuthor.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        var newAuthor = possiblyExistingAuthor.get();
+        book.setAuthor(newAuthor);
+
+        bookService.save(book);
+        return ResponseEntity.ok(BookDto.from(book));
     }
 }

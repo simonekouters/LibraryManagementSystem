@@ -1,13 +1,10 @@
 package com.simonekouters.librarymanagementsystem.author;
 
-import com.simonekouters.librarymanagementsystem.book.Book;
 import com.simonekouters.librarymanagementsystem.book.BookResponseDto;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -39,7 +36,7 @@ public class AuthorController {
     }
 
     @PatchMapping("{id}")
-    public ResponseEntity<AuthorDto> patch(@PathVariable Long id, @RequestBody AuthorDto changedAuthor) {
+    public ResponseEntity<AuthorDto> updateAuthorDetails(@PathVariable Long id, @RequestBody AuthorDto changedAuthor) {
         var possibleOriginalAuthor = authorService.findById(id);
         if (possibleOriginalAuthor.isEmpty()) {
             return ResponseEntity.notFound().build();
