@@ -41,6 +41,14 @@ public class AuthorService {
         return authorRepository.findAllByHasBeenDeletedFalse(pageRequest);
     }
 
+    public Page<Author> findByName(String name, Pageable pageable) {
+        Pageable pageRequest = PageRequest.of(
+                pageable.getPageNumber(),
+                pageable.getPageSize()
+        );
+        return authorRepository.findByNameIgnoringCaseContaining(name, name, pageRequest);
+    }
+
     public Page<BookResponseDto> getAllBooksByAuthorId(Author author, Pageable pageable) {
         Pageable pageRequest = PageRequest.of(
                 pageable.getPageNumber(),

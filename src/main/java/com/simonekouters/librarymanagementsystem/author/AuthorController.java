@@ -35,6 +35,12 @@ public class AuthorController {
         }
     }
 
+    @GetMapping("search/{name}")
+    Page<AuthorResponseDto> findAuthorByName(@PathVariable("name") String name, Pageable pageable) {
+        return authorService.findByName(name, pageable)
+                .map(AuthorResponseDto::from);
+    }
+
     @PatchMapping("{id}")
     public ResponseEntity<AuthorDto> updateAuthorDetails(@PathVariable Long id, @RequestBody AuthorDto changedAuthor) {
         var possibleOriginalAuthor = authorService.findById(id);
