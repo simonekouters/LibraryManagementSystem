@@ -1,6 +1,9 @@
 package com.simonekouters.librarymanagementsystem.member;
 
+import com.simonekouters.librarymanagementsystem.book.Book;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 public class MemberService {
@@ -12,6 +15,11 @@ public class MemberService {
     }
 
 
+    public Set<Book> getBorrowedBooksByMemberId(Long memberId) {
+        return memberRepository.findBorrowedBooksByMemberId(memberId);
+    }
 
-
+    public Set<Book> getReservedBooksByMemberId(Long memberId) {
+        return memberRepository.findReservedBooksByMemberId(memberId);
+    }
 }

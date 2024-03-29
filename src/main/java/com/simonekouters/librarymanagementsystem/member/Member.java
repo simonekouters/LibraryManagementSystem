@@ -16,7 +16,8 @@ import java.util.Set;
 
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name = "member_number", initialValue = 68860880, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY, generator = "member_number")
     private Long memberId;
 
     private String firstName;
@@ -25,7 +26,6 @@ public class Member {
 
     @Column(unique = true)
     private String email;
-    private double fine;
 
     @ManyToMany
     private Set<Book> borrowedBooks = new HashSet<>();
@@ -39,5 +39,4 @@ public class Member {
         this.password = password;
         this.email = email;
     }
-
 }
