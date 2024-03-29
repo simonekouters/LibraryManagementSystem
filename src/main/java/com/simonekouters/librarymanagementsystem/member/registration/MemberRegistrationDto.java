@@ -1,4 +1,4 @@
-package com.simonekouters.librarymanagementsystem.member;
+package com.simonekouters.librarymanagementsystem.member.registration;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 
-public class MemberRegistrationDTO {
+public class MemberRegistrationDto {
     @Valid
 
     @NotNull(message = "first name is mandatory")
@@ -25,11 +25,12 @@ public class MemberRegistrationDTO {
 
     @NotNull(message = "password is mandatory")
     @NotBlank(message = "password is mandatory")
-    @ValidPassword
+    @ValidPassword(message = "Password must have at least one uppercase letter, one lowercase letter, one digit, and one special character")
     private String password;
 
     @NotNull(message = "email is mandatory")
     @NotBlank(message = "email is mandatory")
     @Email(message = "not a valid email address")
     private String email;
+
 }

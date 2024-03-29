@@ -1,4 +1,4 @@
-package com.simonekouters.librarymanagementsystem.member;
+package com.simonekouters.librarymanagementsystem.member.registration;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.ConstraintValidator;
@@ -53,7 +53,7 @@ public class PassWordValidator implements ConstraintValidator<ValidPassword, Str
 @Retention(RetentionPolicy.RUNTIME)
 @Constraint(validatedBy = PassWordValidator.class)
 @interface ValidPassword {
-    String message() default "Password must have at least one uppercase letter, one lowercase letter, one digit, and one special character\"";
+    String message() default "Invalid password";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }
