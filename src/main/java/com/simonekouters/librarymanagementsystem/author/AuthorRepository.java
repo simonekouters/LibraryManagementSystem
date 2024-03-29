@@ -15,6 +15,7 @@ public interface AuthorRepository extends JpaRepository<Author, Long> {
     Optional<Author> findByFirstNameIgnoringCaseAndLastNameIgnoringCaseAndBirthYear(String firstName, String lastName, int birthYear);
     Page<Author> findAllByHasBeenDeletedFalse(Pageable pageable);
 
+    // custom query to find authors by partial or full name
     @Query("SELECT DISTINCT a FROM Author a WHERE (LOWER(a.firstName) LIKE LOWER(CONCAT('%', :name, '%')) " +
             "OR LOWER(a.lastName) LIKE LOWER(CONCAT('%', :name, '%')) " +
             "OR LOWER(CONCAT(a.firstName, ' ', a.lastName)) LIKE LOWER(CONCAT('%', :fullName, '%')))")
