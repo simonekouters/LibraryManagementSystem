@@ -33,6 +33,8 @@ public class Member {
     @ManyToMany
     private Set<Book> reservedBooks = new HashSet<>();
 
+    private boolean hasBeenDeleted = false;
+
     public Member(String firstName, String lastName, String password, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
