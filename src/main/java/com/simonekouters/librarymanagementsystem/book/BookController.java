@@ -1,6 +1,7 @@
 package com.simonekouters.librarymanagementsystem.book;
 
 import com.simonekouters.librarymanagementsystem.author.AuthorService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.net.URI;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("books")
 public class BookController {
@@ -17,10 +19,6 @@ public class BookController {
     private final BookService bookService;
     private final AuthorService authorService;
 
-    public BookController(BookService bookService, AuthorService authorService) {
-        this.bookService = bookService;
-        this.authorService = authorService;
-    }
 
     @PostMapping
     public ResponseEntity<?> add(@RequestBody BookDto bookDto, UriComponentsBuilder ucb) {

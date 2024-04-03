@@ -4,16 +4,16 @@ import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
 import com.simonekouters.librarymanagementsystem.member.Member;
 import com.simonekouters.librarymanagementsystem.member.MemberRepository;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+@RequiredArgsConstructor
 @Service
 @Validated
 public class MemberRegistrationService {
     private final MemberRepository memberRepository;
-    public MemberRegistrationService(MemberRepository memberRepository) {
-        this.memberRepository = memberRepository;
-    }
+
     public boolean isEmailUnique(String email) {
         return memberRepository.findByEmail(email) == null;
     }

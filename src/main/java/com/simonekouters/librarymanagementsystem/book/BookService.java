@@ -4,22 +4,20 @@ import com.simonekouters.librarymanagementsystem.author.Author;
 import com.simonekouters.librarymanagementsystem.author.AuthorService;
 import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class BookService {
 
     private final BookRepository bookRepository;
     private final AuthorService authorService;
 
-    public BookService(BookRepository bookRepository, AuthorService authorService) {
-        this.bookRepository = bookRepository;
-        this.authorService = authorService;
-    }
 
     @Transactional
     public Book createNewBook(BookDto book) {
