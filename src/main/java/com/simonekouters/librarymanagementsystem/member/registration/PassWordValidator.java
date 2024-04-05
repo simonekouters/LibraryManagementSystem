@@ -16,7 +16,7 @@ public class PassWordValidator implements ConstraintValidator<ValidPassword, Str
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
         if (password == null) {
-            return false;
+            return true;
         }
         return lengthIsValid(password) && containsUppercase(password) && containsLowercase(password)
                 && containsDigit(password) && containsSpecialCharacter(password);
