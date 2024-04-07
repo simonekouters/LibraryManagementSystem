@@ -1,21 +1,19 @@
 package com.simonekouters.librarymanagementsystem.author;
 
 import com.simonekouters.librarymanagementsystem.book.BookResponseDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("authors")
 public class AuthorController {
 
     private final AuthorService authorService;
-
-    public AuthorController(AuthorService authorService) {
-        this.authorService = authorService;
-    }
 
     @GetMapping
     public Page<AuthorResponseDto> getAll(Pageable pageable) {

@@ -14,7 +14,7 @@ import java.net.URI;
 public class ReservationController {
     private ReservationService reservationService;
 
-    @PostMapping
+    @PostMapping("{memberId}/{isbn}")
     public ResponseEntity<ReservationDto> addReservation(@PathVariable Long memberId, @PathVariable String isbn, UriComponentsBuilder ucb) {
         var reservation = reservationService.reserveBook(memberId, isbn);
         URI locationOfNewReservation = ucb.path("reservations/{id}").buildAndExpand(reservation.getId()).toUri();

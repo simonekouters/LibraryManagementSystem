@@ -18,9 +18,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Service
 public class ReservationService {
-    private ReservationRepository reservationRepository;
-    private MemberRepository memberRepository;
-    private BookRepository bookRepository;
+    private final ReservationRepository reservationRepository;
+    private final MemberRepository memberRepository;
+    private final BookRepository bookRepository;
     private static final int RESERVATION_LIMIT = 5;
 
     public void checkForLongestPendingReservation(Book book) {
