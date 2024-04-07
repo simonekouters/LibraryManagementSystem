@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -17,6 +18,7 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final AuthorService authorService;
+    private final ArrayList<String> errors = new ArrayList<>();
 
 
     @Transactional
@@ -58,12 +60,16 @@ public class BookService {
         }
 
         if (changedBook.author() != null) {
-            throw new BadInputException("Authors can only be updated separately.");
+            errors.add("Authors can only be updated separately.");
         }
 
         Integer newPublicationYear = changedBook.publicationYear();
         if (newPublicationYear != null) {
             validateAndSetPublicationYear(originalBook, changedBook, newPublicationYear);
+        }
+        if (!errors.isEmpty()) {
+            var invalidBookUpdateArguments = String.join(", ", errors);
+            throw new BadInputException(invalidBookUpdateArguments);
         }
         return bookRepository.save(originalBook);
     }
@@ -72,7 +78,7 @@ public class BookService {
         verifyThatBookDoesNotYetExist(newIsbn);
         String isbnValidationResult = Validation.isbnIsValid(changedBook);
         if (isbnValidationResult != null) {
-            throw new BadInputException(isbnValidationResult);
+            errors.add(isbnValidationResult);
         }
         originalBook.setIsbn(newIsbn);
     }
@@ -80,7 +86,7 @@ public class BookService {
     private void validateAndSetTitle(Book originalBook, BookDto changedBook, String newTitle) {
         String titleValidationResult = Validation.titleIsValid(changedBook);
         if (titleValidationResult != null) {
-            throw new BadInputException(titleValidationResult);
+            errors.add(titleValidationResult);
         }
         originalBook.setTitle(newTitle);
     }
@@ -88,7 +94,7 @@ public class BookService {
     private void validateAndSetPublicationYear(Book originalBook, BookDto changedBook, Integer newPublicationYear) {
         String publicationYearValidationResult = Validation.publicationYearIsValid(changedBook);
         if (publicationYearValidationResult != null) {
-            throw new BadInputException(publicationYearValidationResult);
+            errors.add(publicationYearValidationResult);
         }
         originalBook.setPublicationYear(newPublicationYear);
     }

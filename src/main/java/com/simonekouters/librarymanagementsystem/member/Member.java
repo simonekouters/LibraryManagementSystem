@@ -29,10 +29,10 @@ public class Member {
     @Column(unique = true)
     private String email;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "member")
     private Set<Borrowing> borrowedBooks = new HashSet<>();
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "member")
     private Set<Reservation> reservedBooks = new HashSet<>();
 
     private boolean hasBeenDeleted = false;
