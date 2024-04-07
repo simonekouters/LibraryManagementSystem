@@ -16,7 +16,7 @@ public class BorrowingController {
     private final BorrowingService borrowingService;
 
     @PostMapping
-    public ResponseEntity<BorrowingDto> borrowBook(@PathVariable Long memberId, @PathVariable String isbn, UriComponentsBuilder ucb) {
+    public ResponseEntity<BorrowingDto> addBorrowing(@PathVariable Long memberId, @PathVariable String isbn, UriComponentsBuilder ucb) {
         var borrowing = borrowingService.borrowBook(memberId, isbn);
         URI locationOfNewBorrowing = ucb.path("borrowings/{id}").buildAndExpand(borrowing.getId()).toUri();
         return ResponseEntity.created(locationOfNewBorrowing).body(BorrowingDto.from(borrowing));

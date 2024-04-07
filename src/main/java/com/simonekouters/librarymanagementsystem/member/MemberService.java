@@ -4,12 +4,14 @@ import com.simonekouters.librarymanagementsystem.exceptions.NotFoundException;
 import com.simonekouters.librarymanagementsystem.member.registration.MemberUpdateDto;
 import com.simonekouters.librarymanagementsystem.transaction.Borrowing;
 import com.simonekouters.librarymanagementsystem.transaction.Reservation;
+import com.simonekouters.librarymanagementsystem.transaction.ReservationStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -46,12 +48,18 @@ public class MemberService {
 
     public Set<Borrowing> getBorrowedBooksByMemberId(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundException::new);
-        return member.getBorrowedBooks();
+        return member.getBorrowedBooks().stream()
+                // only show borrowed books that haven't been returned yet
+                .filter(borrowing -> borrowing.getReturnDate() == null)
+                .collect(Collectors.toSet());
     }
 
     public Set<Reservation> getReservedBooksByMemberId(Long memberId) {
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundException::new);
-        return member.getReservedBooks();
+        return member.getReservedBooks().stream()
+                // only show reserved books with status pending
+                .filter(reservation -> reservation.getStatus() == ReservationStatus.PENDING)
+                .collect(Collectors.toSet());
     }
 
     public void delete(Member member) {

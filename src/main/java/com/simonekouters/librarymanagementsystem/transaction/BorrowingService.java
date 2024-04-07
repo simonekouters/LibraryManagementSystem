@@ -9,11 +9,11 @@ import com.simonekouters.librarymanagementsystem.member.Member;
 import com.simonekouters.librarymanagementsystem.member.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Service
@@ -44,9 +44,20 @@ public class BorrowingService {
         borrowing.setDueDate(LocalDate.now().plusDays(DEFAULT_DUE_DAYS));
         borrowingRepository.save(borrowing);
 
+        var possibleReservation = findReservationByBook(member.getReservedBooks(), book);
+        if (possibleReservation.isPresent()) {
+            possibleReservation.get().setStatus(ReservationStatus.FULFILLED);
+        }
+
         member.getBorrowedBooks().add(borrowing);
         memberRepository.save(member);
         return borrowing;
+    }
+
+    public Optional<Reservation> findReservationByBook(Set<Reservation> reservations, Book book) {
+        return reservations.stream()
+                .filter(reservation -> reservation.getBook().equals(book))
+                .findFirst();
     }
 
     public Optional<Borrowing> findById(Long id) {
@@ -60,8 +71,12 @@ public class BorrowingService {
 
         var member = borrowing.getMember();
         member.getBorrowedBooks().remove(borrowing);
+        memberRepository.save(member);
 
         var book = borrowing.getBook();
+        book.setAvailable(true);
+        bookRepository.save(book);
+
         reservationService.checkForLongestPendingReservation(book);
     }
 }
