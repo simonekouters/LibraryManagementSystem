@@ -1,9 +1,10 @@
 package com.simonekouters.librarymanagementsystem.member;
 
-import com.simonekouters.librarymanagementsystem.book.Book;
+import com.simonekouters.librarymanagementsystem.exceptions.NotFoundException;
 import com.simonekouters.librarymanagementsystem.member.registration.MemberUpdateDto;
+import com.simonekouters.librarymanagementsystem.transaction.Borrowing;
+import com.simonekouters.librarymanagementsystem.transaction.Reservation;
 import jakarta.transaction.Transactional;
-import jakarta.validation.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,10 +14,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Service
 public class MemberService {
-
     private final MemberRepository memberRepository;
-    private final ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
-    private final Validator validator = validatorFactory.getValidator();
 
     @Transactional
     public Member save(Member member) {
@@ -46,12 +44,14 @@ public class MemberService {
     }
 
 
-    public Set<Book> getBorrowedBooksByMemberId(Long memberId) {
-        return memberRepository.findBorrowedBooksByMemberId(memberId);
+    public Set<Borrowing> getBorrowedBooksByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundException::new);
+        return member.getBorrowedBooks();
     }
 
-    public Set<Book> getReservedBooksByMemberId(Long memberId) {
-        return memberRepository.findReservedBooksByMemberId(memberId);
+    public Set<Reservation> getReservedBooksByMemberId(Long memberId) {
+        Member member = memberRepository.findById(memberId).orElseThrow(NotFoundException::new);
+        return member.getReservedBooks();
     }
 
     public void delete(Member member) {

@@ -1,10 +1,12 @@
 package com.simonekouters.librarymanagementsystem.member;
 
-import com.simonekouters.librarymanagementsystem.book.Book;
-import com.simonekouters.librarymanagementsystem.book.BookResponseDto;
 import com.simonekouters.librarymanagementsystem.member.registration.MemberRegistrationDto;
 import com.simonekouters.librarymanagementsystem.member.registration.MemberRegistrationService;
 import com.simonekouters.librarymanagementsystem.member.registration.MemberUpdateDto;
+import com.simonekouters.librarymanagementsystem.transaction.Borrowing;
+import com.simonekouters.librarymanagementsystem.transaction.BorrowingDto;
+import com.simonekouters.librarymanagementsystem.transaction.Reservation;
+import com.simonekouters.librarymanagementsystem.transaction.ReservationDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -32,18 +34,18 @@ public class MemberController {
     }
 
     @GetMapping("{memberId}/borrowed")
-    public Iterable<BookResponseDto> borrowedBooks(@PathVariable Long memberId) {
-        Set<Book> borrowedBooks = memberService.getBorrowedBooksByMemberId(memberId);
+    public Iterable<BorrowingDto> borrowedBooks(@PathVariable Long memberId) {
+        Set<Borrowing> borrowedBooks = memberService.getBorrowedBooksByMemberId(memberId);
         return borrowedBooks.stream()
-                .map(BookResponseDto::from)
+                .map(BorrowingDto::from)
                 .toList();
     }
 
     @GetMapping("{memberId}/reserved")
-    public Iterable<BookResponseDto> reservedBooks(@PathVariable Long memberId) {
-        Set<Book> borrowedBooks = memberService.getReservedBooksByMemberId(memberId);
-        return borrowedBooks.stream()
-                .map(BookResponseDto::from)
+    public Iterable<ReservationDto> reservedBooks(@PathVariable Long memberId) {
+        Set<Reservation> reservedBooks = memberService.getReservedBooksByMemberId(memberId);
+        return reservedBooks.stream()
+                .map(ReservationDto::from)
                 .toList();
     }
 
