@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -20,6 +21,7 @@ public class BorrowingService {
     private final BorrowingRepository borrowingRepository;
     private final MemberRepository memberRepository;
     private final BookRepository bookRepository;
+    private final ReservationService reservationService;
 
     private static final int DEFAULT_DUE_DAYS = 21;
     private static final int BORROWING_LIMIT = 10;
@@ -45,5 +47,21 @@ public class BorrowingService {
         member.getBorrowedBooks().add(borrowing);
         memberRepository.save(member);
         return borrowing;
+    }
+
+    public Optional<Borrowing> findById(Long id) {
+        return borrowingRepository.findById(id);
+    }
+
+    @Transactional
+    public void returnBook(Borrowing borrowing) {
+        borrowing.setReturnDate(LocalDate.now());
+        borrowingRepository.save(borrowing);
+
+        var member = borrowing.getMember();
+        member.getBorrowedBooks().remove(borrowing);
+
+        var book = borrowing.getBook();
+        reservationService.checkForLongestPendingReservation(book);
     }
 }
