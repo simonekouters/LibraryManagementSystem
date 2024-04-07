@@ -23,6 +23,7 @@ public class Book {
 
     private Integer publicationYear;
     private boolean hasBeenDeleted = false;
+    private boolean available = true;
 
     public Book(String isbn, String title, Author author, Integer publicationYear) {
         this.isbn = isbn;

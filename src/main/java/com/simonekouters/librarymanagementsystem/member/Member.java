@@ -1,6 +1,7 @@
 package com.simonekouters.librarymanagementsystem.member;
 
 import com.simonekouters.librarymanagementsystem.book.Book;
+import com.simonekouters.librarymanagementsystem.transaction.Borrowing;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -28,10 +29,10 @@ public class Member {
     private String email;
 
     @ManyToMany
-    private Set<Book> borrowedBooks = new HashSet<>();
+    private Set<Borrowing> borrowedBooks = new HashSet<>();
 
     @ManyToMany
-    private Set<Book> reservedBooks = new HashSet<>();
+    private Set<Reservation> reservedBooks = new HashSet<>();
 
     private boolean hasBeenDeleted = false;
 

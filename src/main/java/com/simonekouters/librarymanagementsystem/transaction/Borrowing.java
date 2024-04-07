@@ -7,15 +7,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "transactions")
+@Table(name = "Borrowings")
 
-public class Transaction {
+public class Borrowing {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -28,12 +28,12 @@ public class Transaction {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date borrowDate;
+    @Temporal(TemporalType.DATE)
+    private LocalDate borrowDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date dueDate;
+    @Temporal(TemporalType.DATE)
+    private LocalDate dueDate;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date returnDate;
+    @Temporal(TemporalType.DATE)
+    private LocalDate returnDate;
 }

@@ -41,11 +41,11 @@ public class BookService {
         return bookRepository.save(newBook);
     }
 
-    @Transactional
     public void save(Book book) {
         bookRepository.save(book);
     }
 
+    @Transactional
     public Book updateExistingBook(Book originalBook, BookDto changedBook) {
         String newIsbn = changedBook.isbn();
         if (newIsbn != null) {
@@ -112,6 +112,7 @@ public class BookService {
         return bookRepository.findByAuthorNameIgnoringCaseContaining(name, name, pageable);
     }
 
+    @Transactional
     public void delete(Book book) {
         book.setHasBeenDeleted(true);
         save(book);

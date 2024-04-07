@@ -1,6 +1,7 @@
 package com.simonekouters.librarymanagementsystem.book;
 
 import com.simonekouters.librarymanagementsystem.author.AuthorService;
+import com.simonekouters.librarymanagementsystem.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +51,7 @@ public class BookController {
 
     @DeleteMapping("{isbn}")
     public ResponseEntity<Void> delete(@PathVariable("isbn") String isbn) {
-        Optional<Book> optionalBook = bookService.findByIsbn(isbn);
+        var optionalBook = bookService.findByIsbn(isbn);
         if (optionalBook.isPresent()) {
             Book book = optionalBook.get();
             bookService.delete(book);
@@ -60,6 +61,12 @@ public class BookController {
         }
     }
 
+//    @DeleteMapping("{isbn}")
+//    public ResponseEntity<Void> delete1(@PathVariable("isbn") String isbn) {
+//        Book book = bookService.findByIsbn(isbn).orElseThrow(NotFoundException::new);
+//        bookService.delete(book);
+//        return ResponseEntity.noContent().build();
+//    }
 
     @PatchMapping("{isbn}")
     public ResponseEntity<BookDto> updateBookDetails(@PathVariable String isbn, @RequestBody BookDto changedBook) {

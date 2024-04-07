@@ -38,4 +38,16 @@ public class ExceptionControllerAdvice {
         });
         return ResponseEntity.badRequest().body(errors);
     }
+
+    @ExceptionHandler(BookNotAvailableException.class)
+    public ResponseEntity<ProblemDetail> bookNotAvailableExceptionHandler(BookNotAvailableException exception) {
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return ResponseEntity.badRequest().body(problemDetail);
+    }
+
+    @ExceptionHandler(BorrowingLimitExceededException.class)
+    public ResponseEntity<ProblemDetail> borrowingLimitExceededExceptionHandler(BorrowingLimitExceededException exception) {
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, exception.getMessage());
+        return ResponseEntity.badRequest().body(problemDetail);
+    }
 }
