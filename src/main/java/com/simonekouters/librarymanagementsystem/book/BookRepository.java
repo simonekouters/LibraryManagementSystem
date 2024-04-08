@@ -9,7 +9,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface BookRepository extends JpaRepository<Book, String> {
     Optional<Book> findByIsbnAndHasBeenDeletedFalse(String isbn);
     Page<Book> findByTitleIgnoringCaseContainingAndHasBeenDeletedFalse(String title, Pageable pageable);

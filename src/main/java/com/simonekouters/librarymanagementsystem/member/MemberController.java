@@ -19,12 +19,10 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("members")
+@RequestMapping("/api/v1/members")
 public class MemberController {
-
     private final MemberService memberService;
     private final MemberRegistrationService memberRegistrationService;
-
 
     @PostMapping
     public ResponseEntity<MemberDto> createNewMember(@Valid @RequestBody MemberRegistrationDto memberRegistrationDTO, UriComponentsBuilder ucb) {

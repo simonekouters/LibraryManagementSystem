@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("books")
+@RequestMapping("/api/v1/books")
 public class BookController {
 
     private final BookService bookService;
@@ -52,21 +52,20 @@ public class BookController {
     @DeleteMapping("{isbn}")
     public ResponseEntity<Void> delete(@PathVariable("isbn") String isbn) {
         var optionalBook = bookService.findByIsbn(isbn);
-        if (optionalBook.isPresent()) {
-            Book book = optionalBook.get();
-            bookService.delete(book);
-            return ResponseEntity.noContent().build();
-        } else {
+        if (optionalBook.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
+        Book book = optionalBook.get();
+        bookService.delete(book);
+        return ResponseEntity.noContent().build();
     }
 
-//    @DeleteMapping("{isbn}")
-//    public ResponseEntity<Void> delete1(@PathVariable("isbn") String isbn) {
-//        Book book = bookService.findByIsbn(isbn).orElseThrow(NotFoundException::new);
-//        bookService.delete(book);
-//        return ResponseEntity.noContent().build();
-//    }
+    @DeleteMapping("{isbn}")
+    public ResponseEntity<Void> delete1(@PathVariable("isbn") String isbn) {
+        Book book = bookService.findByIsbn(isbn).orElseThrow(NotFoundException::new);
+        bookService.delete(book);
+        return ResponseEntity.noContent().build();
+    }
 
     @PatchMapping("{isbn}")
     public ResponseEntity<BookDto> updateBookDetails(@PathVariable String isbn, @RequestBody BookDto changedBook) {

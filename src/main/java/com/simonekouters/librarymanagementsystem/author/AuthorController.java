@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("authors")
+@RequestMapping("/api/v1/authors")
 public class AuthorController {
 
     private final AuthorService authorService;

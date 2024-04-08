@@ -10,7 +10,7 @@ import java.net.URI;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("borrowings")
+@RequestMapping("/api/v1/borrowings")
 public class BorrowingController {
     private final BorrowingService borrowingService;
 

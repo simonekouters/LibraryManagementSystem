@@ -10,7 +10,7 @@ import java.net.URI;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("reservations")
+@RequestMapping("/api/v1/reservations")
 public class ReservationController {
     private ReservationService reservationService;
 

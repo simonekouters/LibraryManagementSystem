@@ -10,7 +10,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-@Repository
 public interface AuthorRepository extends JpaRepository<Author, Long> {
     Optional<Author> findByFirstNameIgnoringCaseAndLastNameIgnoringCaseAndBirthYear(String firstName, String lastName, int birthYear);
     Page<Author> findAllByHasBeenDeletedFalse(Pageable pageable);
