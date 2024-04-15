@@ -1,7 +1,6 @@
 package com.simonekouters.librarymanagementsystem.transaction;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface BorrowingRepository extends JpaRepository<Borrowing, Long> {
+public interface BorrowingRepository extends CrudRepository<Borrowing, Long> {
 }

@@ -25,6 +25,6 @@ public class ReservationController {
     public ResponseEntity<String> cancelReservation(@PathVariable Long id) {
         var reservation = reservationService.findById(id).orElseThrow(NotFoundException::new);
         reservationService.cancelReservation(reservation);
-        return ResponseEntity.ok("Book returned successfully");
+        return ResponseEntity.ok("Reservation cancelled successfully");
     }
 }
