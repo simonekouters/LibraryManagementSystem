@@ -13,17 +13,16 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class MemberService {
     private final MemberRepository memberRepository;
 
-    @Transactional
     public Member save(Member member) {
         return memberRepository.save(member);
     }
 
-    @Transactional
     public Member updateExistingMember(Member originalMember, MemberUpdateDto changedMember) {
         if (changedMember.getEmail() != null) {
             originalMember.setEmail(changedMember.getEmail());

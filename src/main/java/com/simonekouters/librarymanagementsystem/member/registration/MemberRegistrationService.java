@@ -3,13 +3,15 @@ package com.simonekouters.librarymanagementsystem.member.registration;
 import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
 import com.simonekouters.librarymanagementsystem.member.Member;
 import com.simonekouters.librarymanagementsystem.member.MemberRepository;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 @Validated
 public class MemberRegistrationService {
     private final MemberRepository memberRepository;

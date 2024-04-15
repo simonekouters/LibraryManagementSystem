@@ -60,13 +60,6 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("{isbn}")
-    public ResponseEntity<Void> delete1(@PathVariable("isbn") String isbn) {
-        Book book = bookService.findByIsbn(isbn).orElseThrow(NotFoundException::new);
-        bookService.delete(book);
-        return ResponseEntity.noContent().build();
-    }
-
     @PatchMapping("{isbn}")
     public ResponseEntity<BookDto> updateBookDetails(@PathVariable String isbn, @RequestBody BookDto changedBook) {
         var possibleOriginalBook = bookService.findByIsbn(isbn);

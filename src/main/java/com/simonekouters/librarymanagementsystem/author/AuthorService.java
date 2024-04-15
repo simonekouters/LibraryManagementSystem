@@ -4,6 +4,7 @@ import com.simonekouters.librarymanagementsystem.book.Book;
 import com.simonekouters.librarymanagementsystem.book.BookResponseDto;
 import com.simonekouters.librarymanagementsystem.book.Validation;
 import com.simonekouters.librarymanagementsystem.exceptions.BadInputException;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class AuthorService {
 
     private final AuthorRepository authorRepository;

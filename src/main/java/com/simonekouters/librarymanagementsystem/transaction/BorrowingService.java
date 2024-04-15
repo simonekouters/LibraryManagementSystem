@@ -15,8 +15,9 @@ import java.time.LocalDate;
 import java.util.Optional;
 import java.util.Set;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class BorrowingService {
     private final BorrowingRepository borrowingRepository;
     private final MemberRepository memberRepository;
@@ -26,7 +27,6 @@ public class BorrowingService {
     private static final int DEFAULT_DUE_DAYS = 21;
     private static final int BORROWING_LIMIT = 10;
 
-    @Transactional
     public Borrowing borrowBook(Long memberId, String isbn) {
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundException::new);
         Book book = bookRepository.findById(isbn).orElseThrow(NotFoundException::new);
@@ -64,7 +64,6 @@ public class BorrowingService {
         return borrowingRepository.findById(id);
     }
 
-    @Transactional
     public void returnBook(Borrowing borrowing) {
         borrowing.setReturnDate(LocalDate.now());
         borrowingRepository.save(borrowing);

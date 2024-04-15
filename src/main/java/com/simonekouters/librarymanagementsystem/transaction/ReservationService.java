@@ -9,14 +9,17 @@ import com.simonekouters.librarymanagementsystem.member.Member;
 import com.simonekouters.librarymanagementsystem.member.MemberRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
+@Transactional
 public class ReservationService {
     private final ReservationRepository reservationRepository;
     private final MemberRepository memberRepository;
@@ -34,7 +37,6 @@ public class ReservationService {
         }
     }
 
-    @Transactional
     public Reservation reserveBook(Long memberId, String isbn) {
         Member member = memberRepository.findById(memberId).orElseThrow(NotFoundException::new);
         Book book = bookRepository.findById(isbn).orElseThrow(NotFoundException::new);
@@ -56,7 +58,6 @@ public class ReservationService {
         return reservationRepository.findById(id);
     }
 
-    @Transactional
     public void cancelReservation(Reservation reservation) {
         reservation.setStatus(ReservationStatus.CANCELLED);
         reservationRepository.save(reservation);

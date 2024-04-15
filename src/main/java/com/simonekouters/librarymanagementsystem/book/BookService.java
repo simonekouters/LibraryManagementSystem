@@ -12,8 +12,9 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
+@Transactional
+@RequiredArgsConstructor
 public class BookService {
 
     private final BookRepository bookRepository;
@@ -21,7 +22,6 @@ public class BookService {
     private final ArrayList<String> errors = new ArrayList<>();
 
 
-    @Transactional
     public Book createNewBook(BookDto book) {
         if (!Validation.isValid(book).isEmpty()) {
             var invalidBookArguments = String.join(", ", Validation.isValid(book));
@@ -47,7 +47,6 @@ public class BookService {
         bookRepository.save(book);
     }
 
-    @Transactional
     public Book updateExistingBook(Book originalBook, BookDto changedBook) {
         String newIsbn = changedBook.isbn();
         if (newIsbn != null) {
@@ -118,7 +117,6 @@ public class BookService {
         return bookRepository.findByAuthorNameIgnoringCaseContaining(name, name, pageable);
     }
 
-    @Transactional
     public void delete(Book book) {
         book.setHasBeenDeleted(true);
         save(book);
