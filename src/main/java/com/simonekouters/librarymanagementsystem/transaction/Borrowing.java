@@ -3,13 +3,12 @@ package com.simonekouters.librarymanagementsystem.transaction;
 import com.simonekouters.librarymanagementsystem.book.Book;
 import com.simonekouters.librarymanagementsystem.member.Member;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity

@@ -9,11 +9,13 @@ import com.simonekouters.librarymanagementsystem.transaction.Reservation;
 import com.simonekouters.librarymanagementsystem.transaction.ReservationDto;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.security.Principal;
 import java.util.Optional;
 import java.util.Set;
 
@@ -24,19 +26,22 @@ public class MemberController {
     private final MemberService memberService;
     private final MemberRegistrationService memberRegistrationService;
 
-    @PostMapping
+    @PostMapping("register")
     public ResponseEntity<MemberDto> createNewMember(@Valid @RequestBody MemberRegistrationDto memberRegistrationDTO, UriComponentsBuilder ucb) {
-        Member newMember = memberRegistrationService.createMember(memberRegistrationDTO);
+        Member newMember = memberRegistrationService.createMember(memberRegistrationDTO, UserRole.USER);
         URI locationOfNewMember = ucb.path("books/{memberId}").buildAndExpand(newMember.getMemberId()).toUri();
         return ResponseEntity.created(locationOfNewMember).body(MemberDto.from(newMember));
     }
 
     @GetMapping("{memberId}/borrowed")
-    public Iterable<BorrowingDto> borrowedBooks(@PathVariable Long memberId) {
+    public ResponseEntity<?> borrowedBooks(@PathVariable Long memberId, Principal principal) {
+        if (!principal.getName().equals(memberId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
         Set<Borrowing> borrowedBooks = memberService.getBorrowedBooksByMemberId(memberId);
-        return borrowedBooks.stream()
+        return ResponseEntity.ok(borrowedBooks.stream()
                 .map(BorrowingDto::from)
-                .toList();
+                .toList());
     }
 
     @GetMapping("{memberId}/reserved")

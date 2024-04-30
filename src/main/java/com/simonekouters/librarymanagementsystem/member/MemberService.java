@@ -62,7 +62,7 @@ public class MemberService {
     }
 
     public void delete(Member member) {
-        member.setHasBeenDeleted(true);
+        member.setEnabled(false);
         save(member);
     }
 

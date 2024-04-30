@@ -1,5 +1,6 @@
 package com.simonekouters.librarymanagementsystem.member.registration;
 
+import com.simonekouters.librarymanagementsystem.member.UserRole;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

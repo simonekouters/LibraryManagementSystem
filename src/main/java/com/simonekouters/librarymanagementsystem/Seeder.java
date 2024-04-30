@@ -1,10 +1,16 @@
 package com.simonekouters.librarymanagementsystem;
 
 import com.simonekouters.librarymanagementsystem.author.Author;
+import com.simonekouters.librarymanagementsystem.authority.Authority;
+import com.simonekouters.librarymanagementsystem.authority.AuthorityRepository;
 import com.simonekouters.librarymanagementsystem.book.Book;
 import com.simonekouters.librarymanagementsystem.book.BookRepository;
+import com.simonekouters.librarymanagementsystem.member.Member;
+import com.simonekouters.librarymanagementsystem.member.MemberRepository;
+import com.simonekouters.librarymanagementsystem.member.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +20,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Seeder implements CommandLineRunner {
     private final BookRepository bookRepository;
+    private final AuthorityRepository authorityRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -28,5 +37,13 @@ public class Seeder implements CommandLineRunner {
             bookRepository.saveAll(List.of(book1, book2, book3, book4, book5, book6, book7));
         }
 
+        var member1 = new Member("Nick", "Lowe", passwordEncoder.encode("Password123!"), "nicklowe@gmail.com");
+        var member2 = new Member("Rob", "Clay", passwordEncoder.encode("Password456?"), "robclaye@gmail.com");
+        var member3 = new Member("Lauren", "Booth", passwordEncoder.encode("Password789!"), "laurenbooth@gmail.com");
+        memberRepository.saveAll(List.of(member1, member2, member3));
+
+        var role1 = new Authority(member1.getMemberId(), UserRole.ADMIN.toString());
+        var role2 = new Authority(member2.getMemberId(), UserRole.USER.toString());
+        authorityRepository.saveAll(List.of(role1, role2));
     }
 }

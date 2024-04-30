@@ -19,7 +19,6 @@ public class Book {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinColumn(name = "author_id")
     private Author author;
-
     private Integer publicationYear;
     private boolean hasBeenDeleted = false;
     private boolean available = true;

@@ -34,7 +34,7 @@ public class Member {
     @ManyToMany(mappedBy = "member")
     private Set<Reservation> reservedBooks = new HashSet<>();
 
-    private boolean hasBeenDeleted = false;
+    private boolean enabled = true;
 
     public Member(String firstName, String lastName, String password, String email) {
         this.firstName = firstName;
