@@ -1,6 +1,5 @@
 package com.simonekouters.librarymanagementsystem.member;
 
-import com.simonekouters.librarymanagementsystem.book.Book;
 import com.simonekouters.librarymanagementsystem.transaction.Borrowing;
 import com.simonekouters.librarymanagementsystem.transaction.Reservation;
 import jakarta.persistence.*;

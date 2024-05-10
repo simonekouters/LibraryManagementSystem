@@ -12,15 +12,15 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 
 import javax.sql.DataSource;
-
 @Configuration
+
 public class ProjectConfiguration {
 
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-        userDetailsManager.setUsersByUsernameQuery("SELECT member_id, password, enabled FROM member WHERE member_id = ?");
-        userDetailsManager.setAuthoritiesByUsernameQuery("SELECT member_id, authority FROM authorities WHERE member_id = ?");
+        userDetailsManager.setUsersByUsernameQuery("SELECT member_id, password, enabled FROM member WHERE member_id = CAST(? AS bigint)");
+        userDetailsManager.setAuthoritiesByUsernameQuery("SELECT member_id, authority FROM authorities WHERE member_id = CAST(? AS bigint)");
         return userDetailsManager;
     }
 

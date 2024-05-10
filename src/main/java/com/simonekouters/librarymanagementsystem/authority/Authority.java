@@ -1,7 +1,6 @@
 package com.simonekouters.librarymanagementsystem.authority;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
