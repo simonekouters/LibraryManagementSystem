@@ -31,7 +31,7 @@ public class MemberRegistrationService {
             throw new BadInputException("Email address already exists");
         }
         Member newMember = new Member(memberRegistrationDto.getFirstName(), memberRegistrationDto.getLastName(), passwordEncoder.encode(memberRegistrationDto.getPassword()), memberRegistrationDto.getEmail());
-        authorityRepository.save(new Authority(newMember.getMemberId(), role.toString()));
+        authorityRepository.save(new Authority(newMember.getEmail(), role.toString()));
         return memberRepository.save(newMember);
     }
 }

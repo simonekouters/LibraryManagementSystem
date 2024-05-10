@@ -41,8 +41,8 @@ public class Seeder implements CommandLineRunner {
         var member2 = new Member("Rob", "Clay", passwordEncoder.encode("Password456?"), "robclaye@gmail.com");
         memberRepository.saveAll(List.of(member1, member2));
 
-        var role1 = new Authority(member1.getMemberId(), UserRole.ADMIN.toString());
-        var role2 = new Authority(member2.getMemberId(), UserRole.USER.toString());
+        var role1 = new Authority(member1.getEmail(), UserRole.ADMIN.toString());
+        var role2 = new Authority(member1.getEmail(), UserRole.USER.toString());
         authorityRepository.saveAll(List.of(role1, role2));
 
     }

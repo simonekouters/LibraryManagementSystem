@@ -1,5 +1,6 @@
 package com.simonekouters.librarymanagementsystem.authority;
 
+import com.simonekouters.librarymanagementsystem.member.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -9,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class Authority {
     @Id
-    private Long memberId;
+    private String email;
 
     private String authority;
 }

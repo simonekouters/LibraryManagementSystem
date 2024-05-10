@@ -19,8 +19,8 @@ public class ProjectConfiguration {
     @Bean
     public UserDetailsService userDetailsService(DataSource dataSource) {
         JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
-        userDetailsManager.setUsersByUsernameQuery("SELECT member_id, password, enabled FROM member WHERE member_id = CAST(? AS bigint)");
-        userDetailsManager.setAuthoritiesByUsernameQuery("SELECT member_id, authority FROM authorities WHERE member_id = CAST(? AS bigint)");
+        userDetailsManager.setUsersByUsernameQuery("SELECT email, password, enabled FROM member WHERE email = ?");
+        userDetailsManager.setAuthoritiesByUsernameQuery("SELECT email, authority FROM authorities WHERE email = ?");
         return userDetailsManager;
     }
 
